@@ -448,6 +448,20 @@ body.site-portal:has(.portal-main > .secret-page) {
   padding: 20px 0 40px;
 }
 
+body.site-portal:has(.portal-main > .secret-page),
+.filia-overlay.is-open {
+  --paper: #ffffff;
+  --ink: #1c1c1a;
+  --body: #34342f;
+  --muted: #7a7a72;
+  --line: #e8e8e2;
+  background-color: #ffffff;
+  background-image:
+    radial-gradient(ellipse at 18% 12%, rgba(255, 255, 255, 0.98), transparent 58%),
+    linear-gradient(135deg, #ffffff 0%, #f7f1f3 45%, #cdb8bf 100%);
+  background-attachment: fixed;
+}
+
 .secret-back {
   display: inline-block;
   margin-bottom: 28px;
