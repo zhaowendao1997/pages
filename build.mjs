@@ -99,6 +99,7 @@ async function loadPosts() {
       tags: postTags,
       cover: data.cover ? String(data.cover) : '',
       coverSize: data.cover ? resolveImage(String(data.cover)) : null,
+      coverExif: type === 'review' && data.cover ? readImageExif(String(data.cover)) : '',
       summary: String(data.summary || ''),
       verdict: data.verdict ? String(data.verdict) : '',
       gear: data.gear && typeof data.gear === 'object' ? data.gear : null,

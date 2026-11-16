@@ -1386,6 +1386,15 @@ body.filia-open {
   object-fit: cover;
 }
 
+.post-cover-exif {
+  margin-top: 5px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  line-height: 1.6;
+  color: var(--muted);
+  text-align: center;
+}
+
 .review-box {
   display: flex;
   gap: 20px;
