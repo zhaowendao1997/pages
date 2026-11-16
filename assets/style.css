@@ -457,8 +457,22 @@ body.site-portal:has(.portal-main > .secret-page),
   --line: #e8e8e2;
   background-color: #ffffff;
   background-image:
-    radial-gradient(ellipse at 18% 12%, rgba(255, 255, 255, 0.98), transparent 58%),
-    linear-gradient(135deg, #ffffff 0%, #f7f1f3 45%, #cdb8bf 100%);
+    radial-gradient(ellipse at 18% 12%, rgba(255, 255, 255, 0.96), transparent 55%),
+    linear-gradient(135deg, #ffffff 0%, #f4eaed 38%, #cdb8bf 100%);
+  background-attachment: fixed;
+}
+
+[data-theme="dark"] body.site-portal:has(.portal-main > .secret-page),
+[data-theme="dark"] .filia-overlay.is-open {
+  --paper: #171714;
+  --ink: #ecebe3;
+  --body: #c9c7be;
+  --muted: #8d8b81;
+  --line: #2c2c26;
+  background-color: #121210;
+  background-image:
+    radial-gradient(ellipse at 75% 80%, rgba(205, 184, 191, 0.3), transparent 60%),
+    linear-gradient(135deg, #121210 0%, #1b1618 45%, #3b2f32 100%);
   background-attachment: fixed;
 }
 
@@ -643,7 +657,7 @@ body.site-portal:has(.portal-main > .secret-page),
 }
 
 .filia-overlay.is-open {
-  background: var(--paper);
+  background-color: transparent;
 }
 
 .filia-overlay.is-closing {
