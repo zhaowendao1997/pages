@@ -508,10 +508,18 @@ body.site-portal:has(.portal-main > .secret-page) {
 
 .secret-note {
   max-width: 34em;
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1.9;
   color: var(--body);
+  margin: 0 0 4px;
+}
+
+.secret-note-sub {
+  max-width: 34em;
   margin: 0;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--muted);
 }
 
 .secret-player {
