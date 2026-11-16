@@ -1894,6 +1894,10 @@ body.filia-open {
   margin-top: 22px;
 }
 
+.archive-page {
+  padding-top: 36px;
+}
+
 .archive-year[hidden],
 .archive-card[hidden] {
   display: none;
@@ -1924,6 +1928,7 @@ body.filia-open {
 }
 
 .archive-month-body {
+  max-width: 1120px;
   margin-bottom: 18px;
 }
 
@@ -1972,6 +1977,7 @@ body.filia-open {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 20px 18px;
   align-items: start;
+  max-width: 1120px;
   margin: 8px 0 4px;
 }
 
@@ -1983,7 +1989,15 @@ body.filia-open {
 .archive-card {
   width: 100%;
   margin: 0;
+  padding: 8px;
+  background: var(--paper);
+  border: 1px solid var(--line);
   vertical-align: top;
+  transition: border-color 0.2s ease;
+}
+
+.archive-card:hover {
+  border-color: var(--accent);
 }
 
 .archive-grid.is-masonry .archive-card {
@@ -1995,7 +2009,7 @@ body.filia-open {
   display: flex;
   align-items: center;
   justify-content: center;
-  max-height: 360px;
+  max-height: 300px;
   margin: 0 0 7px;
   overflow: hidden;
   background: var(--sunk);
@@ -2005,7 +2019,7 @@ body.filia-open {
   display: block;
   width: 100%;
   height: auto;
-  max-height: 360px;
+  max-height: 300px;
   object-fit: contain;
   transition: transform 0.35s ease;
 }

@@ -610,7 +610,7 @@
       }
 
       const width = grid.getBoundingClientRect().width;
-      const columns = width > 900 ? 3 : width > 560 ? 2 : 1;
+      const columns = width > 760 ? 3 : width > 520 ? 2 : 1;
       const cardWidth = (width - gap * (columns - 1)) / columns;
       const heights = new Array(columns).fill(0);
       grid.classList.add("is-masonry");
