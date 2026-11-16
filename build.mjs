@@ -89,7 +89,10 @@ async function loadAlbums() {
       .map((image) => {
       const size = resolveImage(image.src);
       const file = image.src.startsWith('/images/') ? join(publicDir, image.src.slice(1)) : '';
-      const exif = file ? readExif(file) : null;
+      const fullSrc = `/images/albums/${slug}/full/${basename(image.src)}`;
+      const fullSize = resolveImage(fullSrc);
+      const fullFile = fullSize ? join(publicDir, fullSrc.slice(1)) : file;
+      const exif = fullFile ? readExif(fullFile) : null;
       const formatted = formatExif(exif);
       const exposureLine = formatted.exposureLine || image.title || '';
       const fallbackCaption = !exposureLine ? image.alt : '';
@@ -101,6 +104,7 @@ async function loadAlbums() {
         ...image,
         width: size?.width || null,
         height: size?.height || null,
+        full: fullSize ? fullSrc : image.src,
         thumb: thumbSize ? thumbSrc : image.src,
         thumbWidth: thumbSize?.width || size?.width || null,
         thumbHeight: thumbSize?.height || size?.height || null,
