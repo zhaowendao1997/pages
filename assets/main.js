@@ -572,9 +572,6 @@
       const list = month.nextElementSibling;
       month.hidden = !list || !list.querySelector(".archive-card:not([hidden])");
     }
-    for (const grid of document.querySelectorAll(".archive-grid")) {
-      grid.classList.toggle("is-solo", grid.querySelectorAll(".archive-card:not([hidden])").length === 1);
-    }
     if (countEl) countEl.textContent = String(visible);
     for (const tab of tabs) {
       const on = tab.getAttribute("data-archive-tab") === key;
