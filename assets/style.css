@@ -2311,42 +2311,28 @@ body.filia-open {
 
 /* ------------------------------------------------------------ transition */
 
-@view-transition {
-  navigation: auto;
+.main,
+.portal-main {
+  animation: page-enter 320ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
-::view-transition-old(root) {
-  animation: vt-out 180ms ease both;
+.main.is-leaving,
+.portal-main.is-leaving {
+  animation: page-leave 160ms ease both;
+  pointer-events: none;
 }
 
-::view-transition-new(root) {
-  animation: vt-in 260ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
-}
-
-@keyframes vt-out {
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes vt-in {
-  from {
-    opacity: 0;
-    transform: translateY(5px);
-  }
-}
-
-@supports not (view-transition-name: none) {
-  .content,
-  .portal {
-    animation: content-in 380ms ease both;
-  }
-}
-
-@keyframes content-in {
+@keyframes page-enter {
   from {
     opacity: 0;
     transform: translateY(6px);
+  }
+}
+
+@keyframes page-leave {
+  to {
+    opacity: 0;
+    transform: translateY(-4px);
   }
 }
 
@@ -2376,11 +2362,9 @@ body.filia-open {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root),
-  ::view-transition-new(root),
   .lightbox:not([hidden]),
-  .content,
-  .portal {
+  .main,
+  .portal-main {
     animation: none;
   }
 

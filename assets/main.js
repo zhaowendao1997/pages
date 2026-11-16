@@ -573,3 +573,56 @@
 
   apply("*");
 })();
+
+/* ---------------------------------------------------------- page transition */
+
+(() => {
+  const main = document.querySelector("main");
+  if (!main) return;
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let navigating = false;
+
+  const reset = () => {
+    navigating = false;
+    main.classList.remove("is-leaving");
+    document.body.style.pointerEvents = "";
+  };
+
+  window.addEventListener("pageshow", reset);
+
+  document.addEventListener("click", (event) => {
+    if (event.defaultPrevented || event.button !== 0) return;
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    if (reduceMotion.matches) return;
+
+    const link = event.target.closest?.("a");
+    if (!link || link.target || link.hasAttribute("download")) return;
+
+    const href = link.getAttribute("href");
+    if (!href || href.startsWith("#") || /^(mailto|tel|javascript):/i.test(href)) return;
+
+    let url;
+    try {
+      url = new URL(link.href, location.href);
+    } catch {
+      return;
+    }
+
+    if (url.origin !== location.origin) return;
+    if (url.pathname === location.pathname && url.search === location.search) return;
+    if (/\.(?:xml|jpg|jpeg|png|webp|gif|svg|pdf|zip|mp3|mp4)$/i.test(url.pathname)) return;
+
+    event.preventDefault();
+    if (navigating) return;
+
+    navigating = true;
+    main.classList.add("is-leaving");
+    document.body.style.pointerEvents = "none";
+
+    window.setTimeout(() => {
+      location.href = url.href;
+    }, 170);
+  });
+})();
+
