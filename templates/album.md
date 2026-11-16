@@ -5,6 +5,8 @@ location: 拍摄地点
 camera: Fujifilm X-T5
 lens: XF 23mm F1.4 R LM WR
 cover: /images/albums/your-album/01.jpg
+pinTop: []
+pinBottom: []
 ---
 
 一段简短的相册介绍。

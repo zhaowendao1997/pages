@@ -96,7 +96,7 @@ async function loadAlbums() {
   for (const file of files) {
     const { data, body } = await readMarkdown(join(dir, file));
     const slug = basename(file, '.md');
-    const images = extractImages(body)
+    let images = extractImages(body)
       .map((image) => {
       const size = resolveImage(image.src);
       const file = image.src.startsWith('/images/') ? join(publicDir, image.src.slice(1)) : '';
@@ -128,8 +128,10 @@ async function loadAlbums() {
         fallbackCaption,
         exifLine,
       };
-    })
-      .sort((a, b) => {
+    });
+
+    if (String(data.sort || '').toLowerCase() !== 'manual') {
+      images.sort((a, b) => {
         const aDate = a.exif?.date || '';
         const bDate = b.exif?.date || '';
         if (aDate && bDate && aDate !== bDate) return aDate.localeCompare(bDate);
@@ -137,6 +139,24 @@ async function loadAlbums() {
         if (!aDate && bDate) return 1;
         return a.name.localeCompare(b.name, 'zh', { numeric: true, sensitivity: 'base' });
       });
+    }
+
+    const pinKey = (value) => basename(String(value).trim());
+    const asList = (value) => (Array.isArray(value) ? value : value ? [value] : []);
+    const topKeys = new Set(asList(data.pinTop).map(pinKey));
+    const bottomKeys = new Set(asList(data.pinBottom).map(pinKey));
+
+    if (topKeys.size || bottomKeys.size) {
+      const top = [];
+      const middle = [];
+      const bottom = [];
+      for (const image of images) {
+        if (topKeys.has(image.name)) top.push(image);
+        else if (bottomKeys.has(image.name)) bottom.push(image);
+        else middle.push(image);
+      }
+      images = [...top, ...middle, ...bottom];
+    }
     const intro = stripImages(body);
     const introHtml = intro ? renderMarkdown(intro, { resolveImage, fullImage: resolveFullImage, originalImage: resolveOriginalImage }).html : '';
     const cover = data.cover ? String(data.cover) : images[0]?.src || '';
