@@ -1959,10 +1959,6 @@ body.filia-open {
   color: var(--muted);
 }
 
-.archive-section--essays {
-  color: var(--accent);
-}
-
 .archive-title {
   flex: 1;
   min-width: 0;
