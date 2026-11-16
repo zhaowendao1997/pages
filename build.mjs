@@ -47,6 +47,14 @@ function resolveOriginalImage(src) {
   return existsSync(file) ? `/images/full/${relative}` : '';
 }
 
+function readImageExif(src) {
+  const full = resolveOriginalImage(src) || resolveFullImage(src) || src;
+  if (!full || /^(?:https?:)?\/\//.test(full) || full.startsWith('data:')) return '';
+  const file = join(publicDir, full.replace(/^\//, ''));
+  if (!existsSync(file)) return '';
+  return formatExif(readExif(file)).exposureLine || '';
+}
+
 function extractInlinePins(markdown) {
   const pins = new Map();
   const re = /!\[[^\]]*\]\(\s*([^)\s]+)(?:\s+"[^"]*")?\s*\)\s*\{pin:(top|bottom)\}/gi;
@@ -70,8 +78,13 @@ async function loadPosts() {
     if (data.draft === true) continue;
 
     const slug = basename(file, '.md');
-    const rendered = renderMarkdown(body, { resolveImage, fullImage: resolveFullImage, originalImage: resolveOriginalImage });
     const type = data.type === 'review' ? 'review' : 'essay';
+    const rendered = renderMarkdown(body, {
+      resolveImage,
+      fullImage: resolveFullImage,
+      originalImage: resolveOriginalImage,
+      imageExif: type === 'review' ? readImageExif : undefined,
+    });
     const postTags = Array.isArray(data.tags) ? data.tags.map(String) : [];
 
     posts.push({
