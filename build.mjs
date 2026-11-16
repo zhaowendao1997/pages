@@ -33,6 +33,13 @@ function resolveImage(src) {
   return existsSync(file) ? imageSize(file) : null;
 }
 
+function resolveFullImage(src) {
+  if (!src || /^(?:https?:)?\/\//.test(src) || src.startsWith('data:')) return '';
+  const relative = src.replace(/^\//, '').replace(/^images\//, '');
+  const file = join(publicDir, 'images', 'full', relative);
+  return existsSync(file) ? `/images/full/${relative}` : '';
+}
+
 async function loadPosts() {
   const dir = join(contentDir, 'posts');
   const files = (await readdir(dir)).filter((file) => extname(file) === '.md');
@@ -43,7 +50,7 @@ async function loadPosts() {
     if (data.draft === true) continue;
 
     const slug = basename(file, '.md');
-    const rendered = renderMarkdown(body, { resolveImage });
+    const rendered = renderMarkdown(body, { resolveImage, fullImage: resolveFullImage });
     const type = data.type === 'review' ? 'review' : 'essay';
     const postTags = Array.isArray(data.tags) ? data.tags.map(String) : [];
 
@@ -115,7 +122,7 @@ async function loadAlbums() {
       };
     });
     const intro = stripImages(body);
-    const introHtml = intro ? renderMarkdown(intro, { resolveImage }).html : '';
+    const introHtml = intro ? renderMarkdown(intro, { resolveImage, fullImage: resolveFullImage }).html : '';
     const cover = data.cover ? String(data.cover) : images[0]?.src || '';
     const coverThumb = cover ? `/images/albums/${slug}/thumbs/${basename(cover)}` : '';
     const coverThumbSize = coverThumb ? resolveImage(coverThumb) : null;
@@ -153,7 +160,7 @@ async function loadPinned() {
     const { data, body } = await readMarkdown(join(dir, file));
     pinned[basename(file, '.md')] = {
       title: data.title ? String(data.title) : '',
-      bodyHtml: renderMarkdown(body, { resolveImage }).html,
+      bodyHtml: renderMarkdown(body, { resolveImage, fullImage: resolveFullImage }).html,
     };
   }
 
@@ -164,7 +171,7 @@ async function loadAbout() {
   const file = join(contentDir, 'pages', 'about.md');
   if (!existsSync(file)) return { title: '关于', bodyHtml: '<p>这里还没有内容。</p>' };
   const { data, body } = await readMarkdown(file);
-  return { ...data, bodyHtml: renderMarkdown(body, { resolveImage }).html };
+  return { ...data, bodyHtml: renderMarkdown(body, { resolveImage, fullImage: resolveFullImage }).html };
 }
 
 async function emit(routePath, html) {
