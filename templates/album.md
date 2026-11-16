@@ -5,11 +5,11 @@ location: 拍摄地点
 camera: Fujifilm X-T5
 lens: XF 23mm F1.4 R LM WR
 cover: /images/albums/your-album/01.jpg
-pinTop: []
-pinBottom: []
 ---
 
 一段简短的相册介绍。
+
+<!-- 需要固定位置时，在图片行末尾加 {pin:top} 或 {pin:bottom} -->
 
 ![第一张的图注](/images/albums/your-album/01.jpg "X-T5 · 23mm · f/5.6 · 1/500s · ISO 160")
 ![第二张的图注](/images/albums/your-album/02.jpg "X-T5 · 23mm · f/8 · 1/250s · ISO 160")

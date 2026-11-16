@@ -47,6 +47,19 @@ function resolveOriginalImage(src) {
   return existsSync(file) ? `/images/full/${relative}` : '';
 }
 
+function extractInlinePins(markdown) {
+  const pins = new Map();
+  const re = /!\[[^\]]*\]\(\s*([^)\s]+)(?:\s+"[^"]*")?\s*\)\s*\{pin:(top|bottom)\}/gi;
+  for (const match of String(markdown).matchAll(re)) {
+    pins.set(basename(match[1]), match[2].toLowerCase());
+  }
+  return pins;
+}
+
+function stripInlinePins(markdown) {
+  return String(markdown).replace(/\s*\{pin:(?:top|bottom)\}\s*$/gim, '');
+}
+
 async function loadPosts() {
   const dir = join(contentDir, 'posts');
   const files = (await readdir(dir)).filter((file) => extname(file) === '.md');
@@ -94,7 +107,9 @@ async function loadAlbums() {
   const albums = [];
 
   for (const file of files) {
-    const { data, body } = await readMarkdown(join(dir, file));
+    const { data, body: rawBody } = await readMarkdown(join(dir, file));
+    const inlinePins = extractInlinePins(rawBody);
+    const body = stripInlinePins(rawBody);
     const slug = basename(file, '.md');
     let images = extractImages(body)
       .map((image) => {
@@ -143,8 +158,10 @@ async function loadAlbums() {
 
     const pinKey = (value) => basename(String(value).trim());
     const asList = (value) => (Array.isArray(value) ? value : value ? [value] : []);
-    const topKeys = new Set(asList(data.pinTop).map(pinKey));
-    const bottomKeys = new Set(asList(data.pinBottom).map(pinKey));
+    const inlineTop = [...inlinePins].filter(([, position]) => position === 'top').map(([name]) => name);
+    const inlineBottom = [...inlinePins].filter(([, position]) => position === 'bottom').map(([name]) => name);
+    const topKeys = new Set([...asList(data.pinTop).map(pinKey), ...inlineTop]);
+    const bottomKeys = new Set([...asList(data.pinBottom).map(pinKey), ...inlineBottom]);
 
     if (topKeys.size || bottomKeys.size) {
       const top = [];

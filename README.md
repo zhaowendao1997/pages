@@ -137,16 +137,14 @@ gear:
 sort: manual
 ```
 
-如果只想把某几张固定到最前或最后，其余照片仍然按时间排：
+如果只想把某几张固定到最前或最后，其余照片仍然按时间排，直接在图片行末尾加标记：
 
-```yaml
-pinTop:
-  - 03.jpg
-pinBottom:
-  - 13.jpg
+```markdown
+![图注](/images/albums/你的相册/03.jpg){pin:top}
+![图注](/images/albums/你的相册/13.jpg){pin:bottom}
 ```
 
-`pinTop` 里的照片按列表顺序排在最前，`pinBottom` 里的排到最后；填文件名或完整路径都可以。
+标记不会显示在页面上；`pin:top` 排最前，`pin:bottom` 排最后。
 
 也可以在命令行运行：
 
