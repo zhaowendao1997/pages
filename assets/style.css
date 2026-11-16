@@ -2012,6 +2012,24 @@ body.filia-open {
   display: none;
 }
 
+.lb-download {
+  align-self: center;
+  margin-top: 2px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.lb-download:hover {
+  color: #fff;
+}
+
+.lb-download[hidden] {
+  display: none;
+}
+
 .lightbox button {
   position: absolute;
   z-index: 3;

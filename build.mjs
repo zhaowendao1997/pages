@@ -36,6 +36,13 @@ function resolveImage(src) {
 function resolveFullImage(src) {
   if (!src || /^(?:https?:)?\/\//.test(src) || src.startsWith('data:')) return '';
   const relative = src.replace(/^\//, '').replace(/^images\//, '');
+  const file = join(publicDir, 'images', 'large', relative);
+  return existsSync(file) ? `/images/large/${relative}` : '';
+}
+
+function resolveOriginalImage(src) {
+  if (!src || /^(?:https?:)?\/\//.test(src) || src.startsWith('data:')) return '';
+  const relative = src.replace(/^\//, '').replace(/^images\//, '');
   const file = join(publicDir, 'images', 'full', relative);
   return existsSync(file) ? `/images/full/${relative}` : '';
 }
@@ -50,7 +57,7 @@ async function loadPosts() {
     if (data.draft === true) continue;
 
     const slug = basename(file, '.md');
-    const rendered = renderMarkdown(body, { resolveImage, fullImage: resolveFullImage });
+    const rendered = renderMarkdown(body, { resolveImage, fullImage: resolveFullImage, originalImage: resolveOriginalImage });
     const type = data.type === 'review' ? 'review' : 'essay';
     const postTags = Array.isArray(data.tags) ? data.tags.map(String) : [];
 
@@ -96,10 +103,12 @@ async function loadAlbums() {
       .map((image) => {
       const size = resolveImage(image.src);
       const file = image.src.startsWith('/images/') ? join(publicDir, image.src.slice(1)) : '';
-      const fullSrc = `/images/albums/${slug}/full/${basename(image.src)}`;
+      const fullSrc = `/images/albums/${slug}/large/${basename(image.src)}`;
       const fullSize = resolveImage(fullSrc);
-      const fullFile = fullSize ? join(publicDir, fullSrc.slice(1)) : file;
-      const exif = fullFile ? readExif(fullFile) : null;
+      const originalSrc = `/images/albums/${slug}/full/${basename(image.src)}`;
+      const originalSize = resolveImage(originalSrc);
+      const exifFile = originalSize ? join(publicDir, originalSrc.slice(1)) : file;
+      const exif = exifFile ? readExif(exifFile) : null;
       const formatted = formatExif(exif);
       const exposureLine = formatted.exposureLine || image.title || '';
       const fallbackCaption = !exposureLine ? image.alt : '';
@@ -111,7 +120,8 @@ async function loadAlbums() {
         ...image,
         width: size?.width || null,
         height: size?.height || null,
-        full: fullSize ? fullSrc : image.src,
+        full: fullSize ? fullSrc : originalSize ? originalSrc : image.src,
+        original: originalSize ? originalSrc : '',
         thumb: thumbSize ? thumbSrc : image.src,
         thumbWidth: thumbSize?.width || size?.width || null,
         thumbHeight: thumbSize?.height || size?.height || null,
@@ -122,7 +132,7 @@ async function loadAlbums() {
       };
     });
     const intro = stripImages(body);
-    const introHtml = intro ? renderMarkdown(intro, { resolveImage, fullImage: resolveFullImage }).html : '';
+    const introHtml = intro ? renderMarkdown(intro, { resolveImage, fullImage: resolveFullImage, originalImage: resolveOriginalImage }).html : '';
     const cover = data.cover ? String(data.cover) : images[0]?.src || '';
     const coverThumb = cover ? `/images/albums/${slug}/thumbs/${basename(cover)}` : '';
     const coverThumbSize = coverThumb ? resolveImage(coverThumb) : null;
@@ -160,7 +170,7 @@ async function loadPinned() {
     const { data, body } = await readMarkdown(join(dir, file));
     pinned[basename(file, '.md')] = {
       title: data.title ? String(data.title) : '',
-      bodyHtml: renderMarkdown(body, { resolveImage, fullImage: resolveFullImage }).html,
+      bodyHtml: renderMarkdown(body, { resolveImage, fullImage: resolveFullImage, originalImage: resolveOriginalImage }).html,
     };
   }
 
@@ -171,7 +181,7 @@ async function loadAbout() {
   const file = join(contentDir, 'pages', 'about.md');
   if (!existsSync(file)) return { title: '关于', bodyHtml: '<p>这里还没有内容。</p>' };
   const { data, body } = await readMarkdown(file);
-  return { ...data, bodyHtml: renderMarkdown(body, { resolveImage, fullImage: resolveFullImage }).html };
+  return { ...data, bodyHtml: renderMarkdown(body, { resolveImage, fullImage: resolveFullImage, originalImage: resolveOriginalImage }).html };
 }
 
 async function emit(routePath, html) {

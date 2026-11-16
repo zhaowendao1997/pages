@@ -6,6 +6,7 @@
   const image = root.querySelector("[data-lb-img]");
   const caption = root.querySelector("[data-lb-caption]");
   const exif = root.querySelector("[data-lb-exif]");
+  const download = root.querySelector("[data-lb-download]");
   if (!links.length || !image) return;
 
   let index = 0;
@@ -75,6 +76,11 @@
     image.alt = link.dataset.caption || "";
     caption.textContent = link.dataset.caption || "";
     if (exif) exif.textContent = link.dataset.exif || "";
+    if (download) {
+      const original = link.dataset.original || "";
+      download.hidden = !original;
+      download.href = original;
+    }
     root.hidden = false;
     document.body.style.overflow = "hidden";
     resetView();
@@ -85,6 +91,10 @@
     root.hidden = true;
     image.src = "";
     if (exif) exif.textContent = "";
+    if (download) {
+      download.hidden = true;
+      download.href = "";
+    }
     resetView();
     document.body.style.overflow = "";
   };
