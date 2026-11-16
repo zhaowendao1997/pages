@@ -1895,7 +1895,7 @@ body.filia-open {
 }
 
 .archive-year[hidden],
-.archive-year li[hidden] {
+.archive-card[hidden] {
   display: none;
 }
 
@@ -1918,37 +1918,54 @@ body.filia-open {
   display: none;
 }
 
-.archive-year ul {
-  list-style: none;
-  padding: 0;
+.archive-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px 18px;
+  align-items: start;
+  margin: 8px 0 4px;
+}
+
+.archive-card {
+  width: 100%;
   margin: 0;
+  vertical-align: top;
 }
 
-.archive-year li {
-  border-top: 1px solid var(--line);
+.archive-grid.is-solo .archive-card {
+  grid-column: span 2;
 }
 
-.archive-year a {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  padding: 9px 0;
-  font-size: 13px;
+.archive-card-image {
+  margin: 0 0 7px;
+  overflow: hidden;
+  background: var(--sunk);
 }
 
-.archive-year time {
-  flex: none;
-  width: 38px;
-  font-size: 11px;
-  color: var(--muted);
+.archive-card-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.35s ease;
 }
 
-.archive-year a .archive-entry {
-  flex: 1;
-  min-width: 0;
+.archive-card:hover .archive-card-image img {
+  transform: scale(1.02);
+}
+
+.archive-card-meta {
   display: flex;
   align-items: baseline;
   gap: 8px;
+  margin: 0 0 4px;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.archive-card-meta time {
+  flex: none;
+  width: 38px;
+  font-size: 11px;
 }
 
 .archive-section {
@@ -1983,16 +2000,37 @@ body.filia-open {
   color: #8fb0d6;
 }
 
-.archive-title {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.archive-card h4 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--ink);
 }
 
-.archive-year a:hover .archive-title {
+.archive-card:hover h4 {
   color: var(--accent);
+}
+
+@media (max-width: 1100px) {
+  .archive-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .archive-grid.is-solo .archive-card {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .archive-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .archive-grid.is-solo .archive-card {
+    grid-column: auto;
+  }
 }
 
 /* ------------------------------------------------------------------ 404 */

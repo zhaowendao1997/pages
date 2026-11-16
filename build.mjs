@@ -86,6 +86,8 @@ async function loadPosts() {
       imageExif: type === 'review' ? readImageExif : undefined,
     });
     const postTags = Array.isArray(data.tags) ? data.tags.map(String) : [];
+    const cover = data.cover ? String(data.cover) : '';
+    const archiveImage = cover || extractImages(body)[0]?.src || '';
 
     posts.push({
       slug,
@@ -97,9 +99,11 @@ async function loadPosts() {
       type,
       category: String(data.category || postTags[0] || (type === 'review' ? '器材' : '随笔')),
       tags: postTags,
-      cover: data.cover ? String(data.cover) : '',
-      coverSize: data.cover ? resolveImage(String(data.cover)) : null,
-      coverExif: type === 'review' && data.cover ? readImageExif(String(data.cover)) : '',
+      cover,
+      coverSize: cover ? resolveImage(cover) : null,
+      archiveImage,
+      archiveImageSize: archiveImage ? resolveImage(archiveImage) : null,
+      coverExif: type === 'review' && cover ? readImageExif(cover) : '',
       summary: String(data.summary || ''),
       verdict: data.verdict ? String(data.verdict) : '',
       gear: data.gear && typeof data.gear === 'object' ? data.gear : null,
@@ -206,6 +210,7 @@ async function loadAlbums() {
       cover,
       coverThumb: coverThumbSize ? coverThumb : cover,
       coverSize: cover ? resolveImage(cover) : null,
+      coverThumbSize,
       photos: images,
       count: images.length,
       introHtml,

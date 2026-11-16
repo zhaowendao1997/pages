@@ -555,7 +555,7 @@
 
   const tabs = [...bar.querySelectorAll("[data-archive-tab]")];
   const sections = [...document.querySelectorAll(".archive-year")];
-  const items = [...document.querySelectorAll(".archive-year li")];
+  const items = [...document.querySelectorAll(".archive-card")];
   const countEl = document.querySelector("[data-archive-count]");
 
   const apply = (key) => {
@@ -566,11 +566,14 @@
       if (match) visible += 1;
     }
     for (const section of sections) {
-      section.hidden = !section.querySelector("li:not([hidden])");
+      section.hidden = !section.querySelector(".archive-card:not([hidden])");
     }
     for (const month of document.querySelectorAll(".archive-month")) {
       const list = month.nextElementSibling;
-      month.hidden = !list || !list.querySelector("li:not([hidden])");
+      month.hidden = !list || !list.querySelector(".archive-card:not([hidden])");
+    }
+    for (const grid of document.querySelectorAll(".archive-grid")) {
+      grid.classList.toggle("is-solo", grid.querySelectorAll(".archive-card:not([hidden])").length === 1);
     }
     if (countEl) countEl.textContent = String(visible);
     for (const tab of tabs) {
