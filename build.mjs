@@ -94,11 +94,16 @@ async function loadAlbums() {
       const exposureLine = formatted.exposureLine || image.title || '';
       const fallbackCaption = !exposureLine ? image.alt : '';
       const exifLine = exposureLine;
+      const thumbSrc = `/images/albums/${slug}/thumbs/${basename(image.src)}`;
+      const thumbSize = resolveImage(thumbSrc);
 
       return {
         ...image,
         width: size?.width || null,
         height: size?.height || null,
+        thumb: thumbSize ? thumbSrc : image.src,
+        thumbWidth: thumbSize?.width || size?.width || null,
+        thumbHeight: thumbSize?.height || size?.height || null,
         exif,
         exposureLine,
         fallbackCaption,
@@ -108,6 +113,8 @@ async function loadAlbums() {
     const intro = stripImages(body);
     const introHtml = intro ? renderMarkdown(intro, { resolveImage }).html : '';
     const cover = data.cover ? String(data.cover) : images[0]?.src || '';
+    const coverThumb = cover ? `/images/albums/${slug}/thumbs/${basename(cover)}` : '';
+    const coverThumbSize = coverThumb ? resolveImage(coverThumb) : null;
 
     albums.push({
       slug,
@@ -119,6 +126,7 @@ async function loadAlbums() {
       camera: data.camera ? String(data.camera) : '',
       lens: data.lens ? String(data.lens) : '',
       cover,
+      coverThumb: coverThumbSize ? coverThumb : cover,
       coverSize: cover ? resolveImage(cover) : null,
       photos: images,
       count: images.length,
