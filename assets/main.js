@@ -561,12 +561,16 @@
   const apply = (key) => {
     let visible = 0;
     for (const item of items) {
-      const match = key === "*" || item.getAttribute("data-category") === key;
+      const match = key === "*" || item.getAttribute("data-section") === key;
       item.hidden = !match;
       if (match) visible += 1;
     }
     for (const section of sections) {
       section.hidden = !section.querySelector("li:not([hidden])");
+    }
+    for (const month of document.querySelectorAll(".archive-month")) {
+      const list = month.nextElementSibling;
+      month.hidden = !list || !list.querySelector("li:not([hidden])");
     }
     if (countEl) countEl.textContent = String(visible);
     for (const tab of tabs) {

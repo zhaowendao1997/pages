@@ -191,9 +191,13 @@ ol {
 }
 
 .nav a {
-  font-size: 13.5px;
+  font-size: 15.5px;
   color: var(--muted);
   padding: 6px 0;
+}
+
+.nav a[href$="/archive/"] {
+  margin-top: 10px;
 }
 
 .nav a:hover {
@@ -1895,15 +1899,28 @@ body.filia-open {
 }
 
 .archive-year h2 {
-  margin: 0 0 8px;
+  margin: 0 0 4px;
   font-size: 19px;
   font-weight: 500;
   color: var(--accent);
 }
 
+.archive-month {
+  margin: 14px 0 2px;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.archive-month[hidden] {
+  display: none;
+}
+
 .archive-year ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .archive-year li {
@@ -1925,17 +1942,35 @@ body.filia-open {
   color: var(--muted);
 }
 
-.archive-year a span {
+.archive-year a .archive-entry {
   flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
 }
 
-.archive-year em {
+.archive-section {
+  flex: none;
   font-style: normal;
   font-size: 10px;
+  letter-spacing: 0.02em;
   color: var(--muted);
 }
 
-.archive-year a:hover span {
+.archive-section--essays {
+  color: var(--accent);
+}
+
+.archive-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.archive-year a:hover .archive-title {
   color: var(--accent);
 }
 

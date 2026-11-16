@@ -470,7 +470,7 @@ async function main() {
       path: '/archive/',
       description: '全部文章的时间归档。',
     },
-    content: archivePage({ posts: essays }),
+    content: archivePage({ essays, albums, reviews }),
     section: 'essays',
     active: 'archive',
   }));
