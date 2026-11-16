@@ -7,7 +7,7 @@
   --body: #34342f;
   --muted: #7a7a72;
   --line: #e8e8e2;
-  --accent: #a8452a;
+  --accent: #cdb8bf;
   --on-ink: #ffffff;
   --ring: rgba(28, 28, 26, 0.16);
   --sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, -apple-system, sans-serif;
@@ -25,7 +25,7 @@
   --body: #c9c7be;
   --muted: #8d8b81;
   --line: #2c2c26;
-  --accent: #d97757;
+  --accent: #cdb8bf;
   --on-ink: #121210;
   --ring: rgba(255, 255, 255, 0.14);
 }
@@ -348,23 +348,23 @@ ol {
 /* --------------------------------------------------------------- sections */
 
 .site-essays {
-  --accent: #a8452a;
+  --accent: #cdb8bf;
 }
 
 .site-photos {
-  --accent: #4e6356;
+  --accent: #cdb8bf;
 }
 
 .site-gear {
-  --accent: #3f5d7d;
+  --accent: #cdb8bf;
 }
 
 .site-about {
-  --accent: #7a5c3e;
+  --accent: #cdb8bf;
 }
 
 .site-portal {
-  --accent: #a8452a;
+  --accent: #cdb8bf;
 }
 
 /* 棣栭〉绾櫧锛氭暣椤电敤 --paper锛屽崱鐗囧拰椤甸潰鍚岃壊锛岀瓑浜庢病鏈夊崱鐗?*/
@@ -373,23 +373,23 @@ body.site-portal {
 }
 
 [data-theme="dark"] .site-essays {
-  --accent: #d97757;
+  --accent: #cdb8bf;
 }
 
 [data-theme="dark"] .site-photos {
-  --accent: #8fae9a;
+  --accent: #cdb8bf;
 }
 
 [data-theme="dark"] .site-gear {
-  --accent: #8fb0d6;
+  --accent: #cdb8bf;
 }
 
 [data-theme="dark"] .site-about {
-  --accent: #c09b78;
+  --accent: #cdb8bf;
 }
 
 [data-theme="dark"] .site-portal {
-  --accent: #d97757;
+  --accent: #cdb8bf;
 }
 
 /* ---------------------------------------------------------------- portal */
@@ -2353,6 +2353,10 @@ body.filia-open {
 
   .nav a {
     padding: 2px 0;
+  }
+
+  .nav a[href$="/archive/"] {
+    margin-top: 0;
   }
 
   .sidebar-meta {
