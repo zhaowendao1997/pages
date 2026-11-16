@@ -1563,6 +1563,10 @@ body.filia-open {
   text-indent: 2em;
 }
 
+.post--review .prose > p {
+  text-indent: 2em;
+}
+
 /* 行内注释：*这几个字* */
 .prose em {
   font-family: var(--serif);
