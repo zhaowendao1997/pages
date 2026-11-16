@@ -1959,6 +1959,30 @@ body.filia-open {
   color: var(--muted);
 }
 
+.archive-section--essays {
+  color: #a8452a;
+}
+
+.archive-section--photos {
+  color: #4e6356;
+}
+
+.archive-section--gear {
+  color: #3f5d7d;
+}
+
+[data-theme="dark"] .archive-section--essays {
+  color: #d97757;
+}
+
+[data-theme="dark"] .archive-section--photos {
+  color: #8fae9a;
+}
+
+[data-theme="dark"] .archive-section--gear {
+  color: #8fb0d6;
+}
+
 .archive-title {
   flex: 1;
   min-width: 0;
