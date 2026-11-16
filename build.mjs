@@ -87,7 +87,9 @@ async function loadPosts() {
     });
     const postTags = Array.isArray(data.tags) ? data.tags.map(String) : [];
     const cover = data.cover ? String(data.cover) : '';
-    const archiveImage = cover || extractImages(body)[0]?.src || '';
+    const validCover = cover && (resolveImage(cover) || /^https?:\/\//i.test(cover)) ? cover : '';
+    const firstImage = extractImages(body).find((image) => resolveImage(image.src) || /^https?:\/\//i.test(image.src))?.src || '';
+    const archiveImage = validCover || firstImage;
 
     posts.push({
       slug,
