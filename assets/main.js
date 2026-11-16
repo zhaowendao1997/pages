@@ -577,15 +577,15 @@
 /* ---------------------------------------------------------- page transition */
 
 (() => {
-  const main = document.querySelector("main");
-  if (!main) return;
+  const fade = document.querySelector(".page-fade");
+  if (!fade) return;
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   let navigating = false;
 
   const reset = () => {
     navigating = false;
-    main.classList.remove("is-leaving");
+    document.body.classList.remove("is-leaving");
     document.body.style.pointerEvents = "";
   };
 
@@ -617,12 +617,12 @@
     if (navigating) return;
 
     navigating = true;
-    main.classList.add("is-leaving");
+    document.body.classList.add("is-leaving");
     document.body.style.pointerEvents = "none";
 
     window.setTimeout(() => {
       location.href = url.href;
-    }, 170);
+    }, 160);
   });
 })();
 

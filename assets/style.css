@@ -2311,28 +2311,28 @@ body.filia-open {
 
 /* ------------------------------------------------------------ transition */
 
-.main,
-.portal-main {
-  animation: page-enter 320ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
-}
-
-.main.is-leaving,
-.portal-main.is-leaving {
-  animation: page-leave 160ms ease both;
+.page-fade {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  background: var(--paper);
   pointer-events: none;
+  animation: page-fade-in 260ms ease 20ms both;
 }
 
-@keyframes page-enter {
+body.is-leaving .page-fade {
+  animation: none;
+  opacity: 1;
+  transition: opacity 150ms ease;
+}
+
+@keyframes page-fade-in {
   from {
-    opacity: 0;
-    transform: translateY(6px);
+    opacity: 1;
   }
-}
 
-@keyframes page-leave {
   to {
     opacity: 0;
-    transform: translateY(-4px);
   }
 }
 
@@ -2362,10 +2362,15 @@ body.filia-open {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lightbox:not([hidden]),
-  .main,
-  .portal-main {
+  .page-fade,
+  .lightbox:not([hidden]) {
     animation: none;
+    opacity: 0;
+  }
+
+  body.is-leaving .page-fade {
+    opacity: 1;
+    transition: none;
   }
 
   .lightbox img,
