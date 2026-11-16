@@ -424,7 +424,7 @@
     const gap = Number.parseFloat(style.columnGap) || 14;
     const mobile = width < 600;
     const maxPerRow = mobile ? 2 : 4;
-    const minHeight = 150;
+    const minHeight = 220;
     const maxHeight = mobile ? 380 : 440;
     const lastHeight = mobile ? maxHeight : 260;
 
