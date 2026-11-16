@@ -21,7 +21,7 @@ export const site = {
 
   hero: {
     image: '/images/site/hero.jpg',
-    eyebrow: 'ZHAO WENDAO · EST. 2026',
+    eyebrow: 'ZhaoWendao · EST. 2021',
   },
 
   // 首页背景轮播：只放你精选的照片，没列出的不会出现在首页。
