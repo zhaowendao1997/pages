@@ -3,14 +3,18 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "朝闻道的小站 — 一个零依赖的静态博客",
+  "description": "朝闻道的小站，一个极简的个人博客。",
   "scripts": {
     "build": "node build.mjs",
+    "images": "node tools/prepare-images.mjs",
     "dev": "node build.mjs && node serve.mjs --watch",
     "serve": "node serve.mjs",
     "clean": "node -e \"import('node:fs/promises').then(fs => fs.rm('dist', { recursive: true, force: true }))\""
   },
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "sharp": "^0.35.5"
   }
 }

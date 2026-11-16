@@ -4,7 +4,7 @@
 
 首页是「朝闻道的小站」，上面三个入口：狗屁话、小烂片、老古董，各自一套侧栏和页面，内容互不混在一起。
 
-纯静态、零依赖。所有页面由 `node build.mjs` 从 Markdown 生成，托管在 GitHub Pages。
+纯静态。所有页面由 `node build.mjs` 从 Markdown 生成，托管在 GitHub Pages；图片的缩略图、灯箱大图和下载原图由构建自动生成。
 
 ![首页](docs/preview-home.jpg)
 
@@ -13,6 +13,7 @@
 需要 Node.js 18 或更高版本。
 
 ```bash
+npm install
 node build.mjs
 node serve.mjs
 ```
@@ -30,7 +31,7 @@ node build.mjs
 node serve.mjs --watch
 ```
 
-也可以 `npm run dev`。这台机器上如果 npm 报「禁止运行脚本」，用上面的 `node` 命令，或者 `npm.cmd run dev`。
+也可以 `npm run dev`。新增图片后先运行 `npm run images` 生成缩略图/大图；部署时 GitHub Actions 会自动做这一步。这台机器上如果 npm 报「禁止运行脚本」，用 `npm.cmd`。
 
 ## 有什么
 
@@ -272,11 +273,11 @@ node tools/export-text.mjs
 - 正文大图：`public/images/large/` 下同样相对路径，长边 3000px；灯箱用
 - 正文原图：`public/images/full/`，灯箱里点「下载原图」
 
-构建时会自动识别这些文件；没有就退回当前图片。缩略图/大图/原图本身需要提前生成，构建不会自动压缩。
+部署时（GitHub Actions）会自动生成缺失的缩略图、大图和下载原图；生成过一次就跳过。本地新增图片可以运行 `npm run images`。
 - 首页背景：从 `portalPhotos` 里选，建议 1600–2000px 宽，横竖构图都可以
 - 不需要单独准备首页大图
 
-构建时会自动读取图片尺寸；不会压缩图片，上传前用 [Squoosh](https://squoosh.app/) 压一下。
+部署时会自动读取图片尺寸并生成缩略图/大图；如果原图本身很大，也会自动压一份网页显示版。
 
 > 现在的文章、评测和照片都是占位示例（照片来自 Lorem Picsum）。换成自己的内容时，直接改 Markdown 和 `public/images/` 即可。
 
