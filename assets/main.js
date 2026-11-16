@@ -555,7 +555,8 @@
 
   const tabs = [...bar.querySelectorAll("[data-archive-tab]")];
   const sections = [...document.querySelectorAll(".archive-year")];
-  const items = [...document.querySelectorAll(".archive-card")];
+  const months = [...document.querySelectorAll(".archive-month-block")];
+  const items = [...document.querySelectorAll(".archive-card, .archive-text-item")];
   const countEl = document.querySelector("[data-archive-count]");
 
   const apply = (key) => {
@@ -565,12 +566,11 @@
       item.hidden = !match;
       if (match) visible += 1;
     }
-    for (const section of sections) {
-      section.hidden = !section.querySelector(".archive-card:not([hidden])");
+    for (const month of months) {
+      month.hidden = !month.querySelector("[data-section]:not([hidden])");
     }
-    for (const month of document.querySelectorAll(".archive-month")) {
-      const list = month.nextElementSibling;
-      month.hidden = !list || !list.querySelector(".archive-card:not([hidden])");
+    for (const section of sections) {
+      section.hidden = !section.querySelector("[data-section]:not([hidden])");
     }
     if (countEl) countEl.textContent = String(visible);
     for (const tab of tabs) {
@@ -578,6 +578,7 @@
       tab.classList.toggle("is-active", on);
       tab.setAttribute("aria-pressed", on ? "true" : "false");
     }
+    window.__layoutArchive?.();
   };
 
   bar.addEventListener("click", (event) => {
@@ -586,6 +587,58 @@
   });
 
   apply("*");
+})();
+
+/* ---------------------------------------------------- archive masonry */
+
+(() => {
+  const grids = [...document.querySelectorAll(".archive-grid")];
+  if (!grids.length) return;
+
+  let frame = 0;
+
+  const layout = () => {
+    frame = 0;
+    const gap = 18;
+    const rowGap = 22;
+
+    for (const grid of grids) {
+      const cards = [...grid.querySelectorAll(".archive-card:not([hidden])")];
+      if (!cards.length) {
+        grid.style.height = "0px";
+        continue;
+      }
+
+      const width = grid.getBoundingClientRect().width;
+      const columns = width > 900 ? 3 : width > 560 ? 2 : 1;
+      const cardWidth = (width - gap * (columns - 1)) / columns;
+      const heights = new Array(columns).fill(0);
+      grid.classList.add("is-masonry");
+
+      for (const card of cards) {
+        card.style.width = `${cardWidth}px`;
+        card.style.left = "0px";
+        card.style.top = "0px";
+        const height = card.getBoundingClientRect().height;
+        const column = heights.indexOf(Math.min(...heights));
+        card.style.left = `${column * (cardWidth + gap)}px`;
+        card.style.top = `${heights[column]}px`;
+        heights[column] += height + rowGap;
+      }
+
+      grid.style.height = `${Math.max(...heights)}px`;
+    }
+  };
+
+  const schedule = () => {
+    if (frame) return;
+    frame = window.requestAnimationFrame(layout);
+  };
+
+  window.__layoutArchive = schedule;
+  schedule();
+  window.addEventListener("load", schedule);
+  window.addEventListener("resize", schedule);
 })();
 
 /* ---------------------------------------------------------- page transition */

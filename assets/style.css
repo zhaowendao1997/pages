@@ -1918,6 +1918,55 @@ body.filia-open {
   display: none;
 }
 
+.archive-month-block[hidden],
+.archive-text-item[hidden] {
+  display: none;
+}
+
+.archive-month-body {
+  margin-bottom: 18px;
+}
+
+.archive-text-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 14px;
+}
+
+.archive-text-list li {
+  border-top: 1px solid var(--line);
+}
+
+.archive-text-list a {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 13px;
+}
+
+.archive-text-list time {
+  flex: none;
+  width: 38px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.archive-text-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-family: var(--serif);
+  font-size: 14px;
+  color: var(--ink);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.archive-text-list a:hover .archive-text-title {
+  color: var(--accent);
+}
+
 .archive-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1926,10 +1975,20 @@ body.filia-open {
   margin: 8px 0 4px;
 }
 
+.archive-grid.is-masonry {
+  display: block;
+  position: relative;
+}
+
 .archive-card {
   width: 100%;
   margin: 0;
   vertical-align: top;
+}
+
+.archive-grid.is-masonry .archive-card {
+  position: absolute;
+  margin: 0;
 }
 
 .archive-card-image {
