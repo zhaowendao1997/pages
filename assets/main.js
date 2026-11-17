@@ -136,9 +136,14 @@
     show(links.indexOf(link));
   });
 
-  root.querySelector("[data-lb-close]").addEventListener("click", close);
   root.querySelector("[data-lb-prev]").addEventListener("click", () => show(index - 1));
   root.querySelector("[data-lb-next]").addEventListener("click", () => show(index + 1));
+
+  root.addEventListener("click", (event) => {
+    if (root.hidden) return;
+    if (event.target.closest("figure, button, a")) return;
+    close();
+  });
 
   document.addEventListener("keydown", (event) => {
     if (root.hidden) return;

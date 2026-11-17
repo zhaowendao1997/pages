@@ -2282,11 +2282,6 @@ body.filia-open {
   display: block;
 }
 
-.lb-close {
-  top: 18px;
-  right: 18px;
-}
-
 .lb-prev,
 .lb-next {
   top: 50%;
@@ -2397,11 +2392,6 @@ body.filia-open {
 
   .lb-next {
     right: 8px;
-  }
-
-  .lb-close {
-    top: 10px;
-    right: 10px;
   }
 
   .portal-main {
