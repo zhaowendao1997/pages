@@ -19,6 +19,10 @@
   let baseCenterY = 0;
   let drag = null;
   let suppressClick = false;
+  let lastTouchAt = 0;
+  let lastTapAt = 0;
+  let touchDrag = null;
+  let pinch = null;
 
   const apply = () => {
     image.style.transform = `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`;
@@ -54,6 +58,9 @@
     translateX = 0;
     translateY = 0;
     drag = null;
+    touchDrag = null;
+    pinch = null;
+    lastTapAt = 0;
     image.classList.remove("is-dragging");
     if (!animate) image.style.transition = "none";
     apply();
@@ -67,6 +74,17 @@
     window.requestAnimationFrame(() => {
       if (image.complete && image.naturalWidth) measure();
     });
+  };
+
+  const zoomToPoint = (clientX, clientY, nextScale) => {
+    if (!baseWidth || !baseHeight) return;
+    const localX = (clientX - baseCenterX - translateX) / scale;
+    const localY = (clientY - baseCenterY - translateY) / scale;
+    translateX = clientX - baseCenterX - localX * nextScale;
+    translateY = clientY - baseCenterY - localY * nextScale;
+    scale = nextScale;
+    clampPan();
+    apply();
   };
 
   const show = (next) => {
@@ -201,7 +219,146 @@
   image.addEventListener("pointerup", endDrag);
   image.addEventListener("pointercancel", endDrag);
 
+  const touchDistance = (a, b) => Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+  const touchMidpoint = (a, b) => ({
+    x: (a.clientX + b.clientX) / 2,
+    y: (a.clientY + b.clientY) / 2,
+  });
+
+  image.addEventListener(
+    "touchstart",
+    (event) => {
+      if (root.hidden) return;
+      lastTouchAt = performance.now();
+
+      if (event.touches.length >= 2) {
+        event.preventDefault();
+        const [a, b] = event.touches;
+        const mid = touchMidpoint(a, b);
+        pinch = {
+          distance: touchDistance(a, b),
+          scale,
+          localX: (mid.x - baseCenterX - translateX) / scale,
+          localY: (mid.y - baseCenterY - translateY) / scale,
+        };
+        touchDrag = null;
+        lastTapAt = 0;
+        image.classList.add("is-dragging");
+        return;
+      }
+
+      if (event.touches.length === 1) {
+        const touch = event.touches[0];
+        touchDrag = {
+          x: touch.clientX,
+          y: touch.clientY,
+          tx: translateX,
+          ty: translateY,
+          moved: false,
+          startedAt: performance.now(),
+        };
+        if (scale > 1.001) image.classList.add("is-dragging");
+      }
+    },
+    { passive: false }
+  );
+
+  image.addEventListener(
+    "touchmove",
+    (event) => {
+      if (root.hidden) return;
+      event.preventDefault();
+
+      if (pinch && event.touches.length >= 2) {
+        const [a, b] = event.touches;
+        const distance = Math.max(1, touchDistance(a, b));
+        const mid = touchMidpoint(a, b);
+        const nextScale = Math.min(5, Math.max(1, pinch.scale * (distance / pinch.distance)));
+        translateX = mid.x - baseCenterX - pinch.localX * nextScale;
+        translateY = mid.y - baseCenterY - pinch.localY * nextScale;
+        scale = nextScale;
+        clampPan();
+        apply();
+        return;
+      }
+
+      if (!touchDrag || event.touches.length !== 1) return;
+      const touch = event.touches[0];
+      const dx = touch.clientX - touchDrag.x;
+      const dy = touch.clientY - touchDrag.y;
+      if (Math.abs(dx) > 4 || Math.abs(dy) > 4) touchDrag.moved = true;
+
+      if (scale > 1.001) {
+        translateX = touchDrag.tx + dx;
+        translateY = touchDrag.ty + dy;
+        clampPan();
+        apply();
+      }
+    },
+    { passive: false }
+  );
+
+  image.addEventListener("touchend", (event) => {
+    if (root.hidden) return;
+    event.preventDefault();
+
+    const wasPinching = Boolean(pinch);
+    if (event.touches.length < 2) {
+      pinch = null;
+      image.classList.remove("is-dragging");
+    }
+
+    if (event.touches.length === 1) {
+      const touch = event.touches[0];
+      touchDrag = {
+        x: touch.clientX,
+        y: touch.clientY,
+        tx: translateX,
+        ty: translateY,
+        moved: true,
+        startedAt: performance.now(),
+      };
+      lastTapAt = 0;
+      return;
+    }
+
+    if (event.touches.length === 0) {
+      const wasTap = !wasPinching
+        && touchDrag
+        && !touchDrag.moved
+        && performance.now() - touchDrag.startedAt < 320;
+      const touch = event.changedTouches[0];
+
+      if (wasTap && touch) {
+        const now = performance.now();
+        if (now - lastTapAt < 320) {
+          const target = scale < 1.5 ? 3 : scale < 4.5 ? 5 : 1;
+          if (target === 1) {
+            resetView(true);
+          } else {
+            zoomToPoint(touch.clientX, touch.clientY, target);
+          }
+          lastTapAt = 0;
+        } else {
+          lastTapAt = now;
+        }
+      }
+
+      touchDrag = null;
+      pinch = null;
+      image.classList.remove("is-dragging");
+      lastTouchAt = performance.now();
+    }
+  });
+
+  image.addEventListener("touchcancel", () => {
+    pinch = null;
+    touchDrag = null;
+    image.classList.remove("is-dragging");
+  });
+
   image.addEventListener("click", (event) => {
+    if (performance.now() - lastTouchAt < 500) return;
     if (suppressClick) {
       suppressClick = false;
       return;
@@ -213,14 +370,7 @@
       return;
     }
 
-    const nextScale = 3;
-    const localX = (event.clientX - baseCenterX - translateX) / scale;
-    const localY = (event.clientY - baseCenterY - translateY) / scale;
-    translateX = event.clientX - baseCenterX - localX * nextScale;
-    translateY = event.clientY - baseCenterY - localY * nextScale;
-    scale = nextScale;
-    clampPan();
-    apply();
+    zoomToPoint(event.clientX, event.clientY, 3);
   });
 })();
 

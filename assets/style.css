@@ -2170,6 +2170,8 @@ body.filia-open {
   justify-content: center;
   overflow: hidden;
   background: rgba(8, 8, 7, 0.97);
+  overscroll-behavior: contain;
+  touch-action: none;
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
@@ -2192,6 +2194,7 @@ body.filia-open {
   object-fit: contain;
   transform-origin: center center;
   cursor: zoom-in;
+  touch-action: none;
   user-select: none;
   -webkit-user-drag: none;
   will-change: transform;
