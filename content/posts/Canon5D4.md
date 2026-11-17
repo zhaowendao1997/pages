@@ -45,3 +45,5 @@ cover: /images/_IC_0548.jpg
 
 单反永不为奴。
 单反牛逼。
+
+*详细信息参考佳能博物馆 https://global.canon/zh/c-museum/product/dslr849.html
