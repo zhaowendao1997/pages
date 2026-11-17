@@ -1682,7 +1682,7 @@ body.filia-open {
 .prose blockquote {
   margin: 1.8em 0;
   padding: 2px 0 2px 16px;
-  border-left: 2px solid var(--accent);
+  border-left: 2px solid #a8452a;
   color: var(--muted);
 }
 
