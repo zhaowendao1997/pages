@@ -1616,8 +1616,16 @@ body.filia-open {
   text-indent: 2em;
 }
 
-.post--review .prose > p {
+.post--review .prose > p:not(.no-indent) {
   text-indent: 2em;
+}
+
+.post--review .prose > p.no-indent {
+  text-indent: 0;
+}
+
+.post--review .prose > p.no-indent .review-line-indent {
+  display: none;
 }
 
 .post--review .review-line-indent {
