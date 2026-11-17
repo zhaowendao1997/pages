@@ -1,6 +1,6 @@
 import { mkdir, readFile, readdir, writeFile, rm, cp } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
-import { join, extname, basename } from 'node:path';
+import { join, extname, basename, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { site } from './site.config.mjs';
@@ -135,9 +135,9 @@ async function loadAlbums() {
       .map((image) => {
       const size = resolveImage(image.src);
       const file = image.src.startsWith('/images/') ? join(publicDir, image.src.slice(1)) : '';
-      const fullSrc = `/images/albums/${slug}/large/${basename(image.src)}`;
+      const fullSrc = `${dirname(image.src).replaceAll('\\', '/')}/large/${basename(image.src)}`;
       const fullSize = resolveImage(fullSrc);
-      const originalSrc = `/images/albums/${slug}/full/${basename(image.src)}`;
+      const originalSrc = `${dirname(image.src).replaceAll('\\', '/')}/full/${basename(image.src)}`;
       const originalSize = resolveImage(originalSrc);
       const exifFile = originalSize ? join(publicDir, originalSrc.slice(1)) : file;
       const exif = exifFile ? readExif(exifFile) : null;
@@ -145,7 +145,7 @@ async function loadAlbums() {
       const exposureLine = formatted.exposureLine || image.title || '';
       const fallbackCaption = !exposureLine ? image.alt : '';
       const exifLine = exposureLine;
-      const thumbSrc = `/images/albums/${slug}/thumbs/${basename(image.src)}`;
+      const thumbSrc = `${dirname(image.src).replaceAll('\\', '/')}/thumbs/${basename(image.src)}`;
       const thumbSize = resolveImage(thumbSrc);
 
       return {
@@ -197,7 +197,7 @@ async function loadAlbums() {
     const intro = stripImages(body);
     const introHtml = intro ? renderMarkdown(intro, { resolveImage, fullImage: resolveFullImage, originalImage: resolveOriginalImage }).html : '';
     const cover = data.cover ? String(data.cover) : images[0]?.src || '';
-    const coverThumb = cover ? `/images/albums/${slug}/thumbs/${basename(cover)}` : '';
+    const coverThumb = cover ? `${dirname(cover).replaceAll('\\', '/')}/thumbs/${basename(cover)}` : '';
     const coverThumbSize = coverThumb ? resolveImage(coverThumb) : null;
 
     albums.push({
