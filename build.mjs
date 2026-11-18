@@ -478,7 +478,7 @@ async function main() {
       description: '全部文章的时间归档。',
     },
     content: archivePage({ essays, albums, reviews }),
-    section: 'essays',
+    section: 'archive',
     active: 'archive',
   }));
 

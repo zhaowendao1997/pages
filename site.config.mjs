@@ -66,6 +66,12 @@ export const site = {
       bio: '乱写 乱拍 乱玩',
       nav: [{ label: '关于我与网站', href: '/about/', key: 'about' }],
     },
+    archive: {
+      mark: '档',
+      label: '归档',
+      bio: '按时间回看。',
+      nav: [],
+    },
   },
 
   socials: [
