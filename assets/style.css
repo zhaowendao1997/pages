@@ -1645,7 +1645,7 @@ body.filia-open {
 .prose .note {
   margin: 0 0 1.5em;
   padding-left: 14px;
-  border-left: 1px solid var(--line);
+  border-left: 1px solid var(--accent);
   font-family: var(--serif);
   font-style: italic;
   font-weight: 600;
@@ -1682,7 +1682,7 @@ body.filia-open {
 .prose blockquote {
   margin: 1.8em 0;
   padding: 2px 0 2px 16px;
-  border-left: 2px solid #a8452a;
+  border-left: 2px solid var(--accent);
   color: var(--muted);
 }
 
