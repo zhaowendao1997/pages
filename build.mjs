@@ -21,6 +21,7 @@ const assetsDir = join(root, 'assets');
 const distDir = join(root, 'dist');
 
 const u = makeUrl(site);
+site.assetVersion = Date.now().toString(36);
 
 async function readMarkdown(file) {
   const raw = await readFile(file, 'utf8');
