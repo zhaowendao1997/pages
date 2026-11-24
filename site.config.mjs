@@ -80,8 +80,8 @@ export const site = {
 
   // “关于”页和器材页会用到
   kit: [
-    { role: '机身', name: 'Canon EOS 5D Mark IV' },
-    { role: '镜头', name: 'Canon EF 24-105mm f/4L IS USM' },
+    { role: '机身', name: 'SONY α7RⅡ' },
+    { role: '镜头', name: 'SONY Sonnar T* FE 55mm F1.8 ZA' },
   ],
 
   footerNote: '除非特别注明，本站文字与照片均为原创。',
